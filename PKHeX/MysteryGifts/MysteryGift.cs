@@ -25,6 +25,8 @@ namespace PKHeX.Core
         /// <remarks>This overload differs from <see cref="getMysteryGift(byte[])"/> by checking the <paramref name="data"/>/<paramref name="ext"/> combo for validity.  If either is invalid, a null reference is returned.</remarks>
         public static MysteryGift getMysteryGift(byte[] data, string ext)
         {
+            if (string.IsNullOrEmpty(ext))
+                return getMysteryGift(data);
             // Generation 7
             if (data.Length == WC7.SizeFull && ext == ".wc7full")
                 return new WC7(data);
@@ -59,9 +61,10 @@ namespace PKHeX.Core
         {
             switch (data.Length)
             {
+                case WC6.SizeBOSS:
                 case WC6.SizeFull:
                     // Check WC7 size collision
-                    if (data[0x205] == 0) // 3 * 0x46 for gen6, now only 2.
+                    if (data[data.Length - 0x20B] == 0) // 3 * 0x46 for gen6, now only 2.
                         return new WC7(data);
                     return new WC6(data);
                 case WC6.Size:

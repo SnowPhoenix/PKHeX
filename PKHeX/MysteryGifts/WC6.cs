@@ -8,17 +8,18 @@ namespace PKHeX.Core
     {
         public const int Size = 0x108;
         public const int SizeFull = 0x310;
+        public const int SizeBOSS = 0x5A6;
         public const uint EonTicketConst = 0x225D73C2;
         public override int Format => 6;
 
         public WC6(byte[] data = null)
         {
             Data = (byte[])(data?.Clone() ?? new byte[Size]);
-            if (Data.Length == SizeFull)
+            if (Data.Length == SizeFull || Data.Length == SizeBOSS)
             {
-                if (Data[0x205] == 0)
+                if (Data[Data.Length - 0x20B] == 0)
                     Data = new byte[Data.Length]; // Invalidate
-                Data = Data.Skip(SizeFull - Size).ToArray();
+                Data = Data.Skip(Data.Length - Size).ToArray();
                 DateTime now = DateTime.Now;
                 Year = (uint)now.Year;
                 Month = (uint)now.Month;

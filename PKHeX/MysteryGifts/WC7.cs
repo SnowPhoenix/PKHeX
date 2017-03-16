@@ -8,14 +8,15 @@ namespace PKHeX.Core
     {
         public const int Size = 0x108;
         public const int SizeFull = 0x310;
+        public const int SizeBOSS = 0x5A6;
         public override int Format => 7;
 
         public WC7(byte[] data = null)
         {
             Data = (byte[])(data?.Clone() ?? new byte[Size]);
-            if (Data.Length == SizeFull)
+            if (Data.Length == SizeFull || Data.Length == SizeBOSS)
             {
-                Data = Data.Skip(SizeFull - Size).ToArray();
+                Data = Data.Skip(Data.Length - Size).ToArray();
                 DateTime now = DateTime.Now;
                 Year = (uint)now.Year;
                 Month = (uint)now.Month;

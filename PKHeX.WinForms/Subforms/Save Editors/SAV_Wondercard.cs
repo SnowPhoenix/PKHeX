@@ -416,7 +416,7 @@ namespace PKHeX.WinForms
 
                 if (files.Length < 1)
                     return;
-                if (PCD.Size < (int)new FileInfo(files[0]).Length)
+                if (WC6.SizeBOSS < (int)new FileInfo(files[0]).Length)
                 { WinFormsUtil.Alert("Data size invalid.", files[0]); return; }
                 
                 byte[] data = File.ReadAllBytes(files[0]);
