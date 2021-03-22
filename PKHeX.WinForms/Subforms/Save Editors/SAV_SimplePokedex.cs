@@ -6,27 +6,30 @@ namespace PKHeX.WinForms
 {
     public partial class SAV_SimplePokedex : Form
     {
-        public SAV_SimplePokedex()
+        private readonly SaveFile Origin;
+        private readonly SaveFile SAV;
+
+        public SAV_SimplePokedex(SaveFile sav)
         {
             InitializeComponent();
-            WinFormsUtil.TranslateInterface(this, Main.curlanguage);
+            WinFormsUtil.TranslateInterface(this, Main.CurrentLanguage);
+            SAV = (Origin = sav).Clone();
             seen = new bool[SAV.MaxSpeciesID];
             caught = new bool[SAV.MaxSpeciesID];
 
-            string[] spec = Util.getSpeciesList(Main.curlanguage);
+            var speciesNames = GameInfo.Strings.specieslist;
             for (int i = 0; i < seen.Length; i++)
             {
                 int species = i + 1;
-                seen[i] = SAV.getSeen(species);
-                caught[i] = SAV.getCaught(species);
-                CLB_Seen.Items.Add(spec[species]);
-                CLB_Caught.Items.Add(spec[species]);
+                seen[i] = SAV.GetSeen(species);
+                caught[i] = SAV.GetCaught(species);
+                CLB_Seen.Items.Add(speciesNames[species]);
+                CLB_Caught.Items.Add(speciesNames[species]);
                 CLB_Seen.SetItemChecked(i, seen[i]);
                 CLB_Caught.SetItemChecked(i, caught[i]);
             }
             initialized = true;
         }
-        private readonly SaveFile SAV = Main.SAV.Clone();
 
         private readonly bool[] seen;
         private readonly bool[] caught;
@@ -37,11 +40,10 @@ namespace PKHeX.WinForms
             for (int i = 0; i < seen.Length; i++)
             {
                 int species = i + 1;
-                SAV.setSeen(species, seen[i]);
-                SAV.setCaught(species, caught[i]);
+                SAV.SetSeen(species, seen[i]);
+                SAV.SetCaught(species, caught[i]);
             }
-            SAV.Data.CopyTo(Main.SAV.Data, 0);
-            Main.SAV.Edited = true;
+            Origin.CopyChangesFrom(SAV);
             Close();
         }
 

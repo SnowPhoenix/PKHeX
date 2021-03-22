@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SAV_Pokedex4));
             this.B_Cancel = new System.Windows.Forms.Button();
             this.LB_Species = new System.Windows.Forms.ListBox();
             this.CHK_Caught = new System.Windows.Forms.CheckBox();
@@ -51,6 +50,8 @@
             this.mnuCaughtNone = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuCaughtAll = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuComplete = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuUpgraded = new System.Windows.Forms.ToolStripMenuItem();
+            this.CB_DexUpgraded = new System.Windows.Forms.ToolStripComboBox();
             this.CHK_Seen = new System.Windows.Forms.CheckBox();
             this.LB_Gender = new System.Windows.Forms.ListBox();
             this.B_GUp = new System.Windows.Forms.Button();
@@ -90,7 +91,7 @@
             this.LB_Species.Name = "LB_Species";
             this.LB_Species.Size = new System.Drawing.Size(130, 225);
             this.LB_Species.TabIndex = 2;
-            this.LB_Species.SelectedIndexChanged += new System.EventHandler(this.changeLBSpecies);
+            this.LB_Species.SelectedIndexChanged += new System.EventHandler(this.ChangeLBSpecies);
             // 
             // CHK_Caught
             // 
@@ -183,9 +184,7 @@
             this.CB_Species.Name = "CB_Species";
             this.CB_Species.Size = new System.Drawing.Size(92, 21);
             this.CB_Species.TabIndex = 21;
-            this.CB_Species.SelectedIndexChanged += new System.EventHandler(this.changeCBSpecies);
-            this.CB_Species.SelectedValueChanged += new System.EventHandler(this.changeCBSpecies);
-            this.CB_Species.KeyDown += new System.Windows.Forms.KeyEventHandler(this.removedropCB);
+            this.CB_Species.SelectedValueChanged += new System.EventHandler(this.ChangeCBSpecies);
             // 
             // B_GiveAll
             // 
@@ -241,44 +240,59 @@
             this.mnuSeenAll,
             this.mnuCaughtNone,
             this.mnuCaughtAll,
-            this.mnuComplete});
+            this.mnuComplete,
+            this.mnuUpgraded});
             this.modifyMenu.Name = "modifyMenu";
-            this.modifyMenu.Size = new System.Drawing.Size(149, 114);
+            this.modifyMenu.Size = new System.Drawing.Size(149, 136);
             // 
             // mnuSeenNone
             // 
             this.mnuSeenNone.Name = "mnuSeenNone";
             this.mnuSeenNone.Size = new System.Drawing.Size(148, 22);
             this.mnuSeenNone.Text = "Seen none";
-            this.mnuSeenNone.Click += new System.EventHandler(this.modifyAll);
+            this.mnuSeenNone.Click += new System.EventHandler(this.ModifyAll);
             // 
             // mnuSeenAll
             // 
             this.mnuSeenAll.Name = "mnuSeenAll";
             this.mnuSeenAll.Size = new System.Drawing.Size(148, 22);
             this.mnuSeenAll.Text = "Seen all";
-            this.mnuSeenAll.Click += new System.EventHandler(this.modifyAll);
+            this.mnuSeenAll.Click += new System.EventHandler(this.ModifyAll);
             // 
             // mnuCaughtNone
             // 
             this.mnuCaughtNone.Name = "mnuCaughtNone";
             this.mnuCaughtNone.Size = new System.Drawing.Size(148, 22);
             this.mnuCaughtNone.Text = "Caught none";
-            this.mnuCaughtNone.Click += new System.EventHandler(this.modifyAll);
+            this.mnuCaughtNone.Click += new System.EventHandler(this.ModifyAll);
             // 
             // mnuCaughtAll
             // 
             this.mnuCaughtAll.Name = "mnuCaughtAll";
             this.mnuCaughtAll.Size = new System.Drawing.Size(148, 22);
             this.mnuCaughtAll.Text = "Caught all";
-            this.mnuCaughtAll.Click += new System.EventHandler(this.modifyAll);
+            this.mnuCaughtAll.Click += new System.EventHandler(this.ModifyAll);
             // 
             // mnuComplete
             // 
             this.mnuComplete.Name = "mnuComplete";
             this.mnuComplete.Size = new System.Drawing.Size(148, 22);
             this.mnuComplete.Text = "Complete Dex";
-            this.mnuComplete.Click += new System.EventHandler(this.modifyAll);
+            this.mnuComplete.Click += new System.EventHandler(this.ModifyAll);
+            // 
+            // mnuUpgraded
+            // 
+            this.mnuUpgraded.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.CB_DexUpgraded});
+            this.mnuUpgraded.Name = "mnuUpgraded";
+            this.mnuUpgraded.Size = new System.Drawing.Size(148, 22);
+            this.mnuUpgraded.Text = "Dex Upgrade";
+            // 
+            // CB_DexUpgraded
+            // 
+            this.CB_DexUpgraded.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CB_DexUpgraded.Name = "CB_DexUpgraded";
+            this.CB_DexUpgraded.Size = new System.Drawing.Size(112, 23);
             // 
             // CHK_Seen
             // 
@@ -307,7 +321,7 @@
             this.B_GUp.TabIndex = 46;
             this.B_GUp.Text = "↑";
             this.B_GUp.UseVisualStyleBackColor = true;
-            this.B_GUp.Click += new System.EventHandler(this.moveGender);
+            this.B_GUp.Click += new System.EventHandler(this.MoveGender);
             // 
             // B_GDown
             // 
@@ -317,7 +331,7 @@
             this.B_GDown.TabIndex = 47;
             this.B_GDown.Text = "↓";
             this.B_GDown.UseVisualStyleBackColor = true;
-            this.B_GDown.Click += new System.EventHandler(this.moveGender);
+            this.B_GDown.Click += new System.EventHandler(this.MoveGender);
             // 
             // B_GRight
             // 
@@ -327,7 +341,7 @@
             this.B_GRight.TabIndex = 49;
             this.B_GRight.Text = ">";
             this.B_GRight.UseVisualStyleBackColor = true;
-            this.B_GRight.Click += new System.EventHandler(this.toggleSeen);
+            this.B_GRight.Click += new System.EventHandler(this.ToggleSeen);
             // 
             // B_GLeft
             // 
@@ -337,7 +351,7 @@
             this.B_GLeft.TabIndex = 48;
             this.B_GLeft.Text = "<";
             this.B_GLeft.UseVisualStyleBackColor = true;
-            this.B_GLeft.Click += new System.EventHandler(this.toggleSeen);
+            this.B_GLeft.Click += new System.EventHandler(this.ToggleSeen);
             // 
             // LB_NGender
             // 
@@ -363,7 +377,7 @@
             this.B_FRight.TabIndex = 55;
             this.B_FRight.Text = ">";
             this.B_FRight.UseVisualStyleBackColor = true;
-            this.B_FRight.Click += new System.EventHandler(this.toggleForm);
+            this.B_FRight.Click += new System.EventHandler(this.ToggleForm);
             // 
             // B_FLeft
             // 
@@ -373,7 +387,7 @@
             this.B_FLeft.TabIndex = 54;
             this.B_FLeft.Text = "<";
             this.B_FLeft.UseVisualStyleBackColor = true;
-            this.B_FLeft.Click += new System.EventHandler(this.toggleForm);
+            this.B_FLeft.Click += new System.EventHandler(this.ToggleForm);
             // 
             // B_FDown
             // 
@@ -383,7 +397,7 @@
             this.B_FDown.TabIndex = 53;
             this.B_FDown.Text = "↓";
             this.B_FDown.UseVisualStyleBackColor = true;
-            this.B_FDown.Click += new System.EventHandler(this.moveForm);
+            this.B_FDown.Click += new System.EventHandler(this.MoveForm);
             // 
             // B_FUp
             // 
@@ -393,7 +407,7 @@
             this.B_FUp.TabIndex = 52;
             this.B_FUp.Text = "↑";
             this.B_FUp.UseVisualStyleBackColor = true;
-            this.B_FUp.Click += new System.EventHandler(this.moveForm);
+            this.B_FUp.Click += new System.EventHandler(this.MoveForm);
             // 
             // LB_Form
             // 
@@ -451,7 +465,7 @@
             this.Controls.Add(this.LB_Species);
             this.Controls.Add(this.B_Cancel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = global::PKHeX.WinForms.Properties.Resources.Icon;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SAV_Pokedex4";
@@ -488,6 +502,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuCaughtNone;
         private System.Windows.Forms.ToolStripMenuItem mnuCaughtAll;
         private System.Windows.Forms.ToolStripMenuItem mnuComplete;
+        private System.Windows.Forms.ToolStripMenuItem mnuUpgraded;
         private System.Windows.Forms.CheckBox CHK_Seen;
         private System.Windows.Forms.ListBox LB_Gender;
         private System.Windows.Forms.Button B_GUp;
@@ -503,5 +518,6 @@
         private System.Windows.Forms.ListBox LB_Form;
         private System.Windows.Forms.Label L_Seen;
         private System.Windows.Forms.Label L_NotSeen;
+        private System.Windows.Forms.ToolStripComboBox CB_DexUpgraded;
     }
 }
